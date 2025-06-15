@@ -8,15 +8,20 @@ project("CMakeProject")
 #add_custom_target() # 自定义构建目标
 #add_custom_command() # 自定义构建命令
 # https://cmake.org/cmake/help/git-master/command/add_library.html#command:add_library
+
 # add_executable(${CMAKE_PROJECT_NAME} ${SRC_CODE})
 # add_library(${CMAKE_PROJECT_NAME} SHARED ${SRC_CODE}) 通用动态链接库，可以被多个应用程序使用。
 # add_library(${CMAKE_PROJECT_NAME} STATIC ${SRC_CODE})
 # add_library(${CMAKE_PROJECT_NAME} MODULE ${SRC_CODE}) 特定用途的动态链接库，用于实现特定功能，通常在运行时被加载。
 
-
+set(CMAKE_C_STANDARD 17)
 set(CMAKE_CXX_STANDARD 17)  # 设定C++标准
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+
+#set(CMAKE_C_COMPILER)
+#set(CMAKE_CXX_COMPILER)
+set(CMAKE_TOOLCHAIN_FILE conan_toolchain.cmake)
 set(CMAKE_BUILD_TYPE Release)
 
 
@@ -24,8 +29,19 @@ set(CMAKE_BUILD_TYPE Release)
 include(cmake/env.cmake)
 print_all_variables()# 使用宏
 
-include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-conan_basic_setup()
+if (EXISTS "${CMAKE_BINARY_DIR}/conan_toolchain.cmake")
+    include(${CMAKE_BINARY_DIR}/conan_toolchain.cmake)
+endif ()
+
+
+include(${CMAKE_BINARY_DIR}/BoostConfig.cmake)
+find_package(Boost REQUIRED CONFIG)
+add_executable(${CMAKE_PROJECT_NAME} main.cpp)
+target_link_libraries(
+        ${CMAKE_PROJECT_NAME}
+        PRIVATE
+        boost::boost
+)
 
 # 文件操作：READ、WRITE、APPEND、COPY、REMOVE、RENAME、MAKE_DIRECTORY、GLOB、MD5、DOWNLOAD……
 # file(GLOB SRC_CODE *.c *.cpp *.cxx *.h *.hpp)
@@ -63,7 +79,6 @@ conan_basic_setup()
 #target_sources()
 
 
-
 #cmake --install
 #set(CMAKE_INSTALL_PREFIX "/usr/local/bin")
 #install(TARGETS ${CMAKE_PROJECT_NAME}
@@ -77,3 +92,11 @@ conan_basic_setup()
 #ctest
 #enable_testing()
 #add_test(NAME my_test COMMAND my_test_executable)
+
+
+# 安装可执行文件
+install(TARGETS ${CMAKE_PROJECT_NAME}
+        RUNTIME DESTINATION bin  # 可执行文件目录
+        LIBRARY DESTINATION lib  # 动态库目录（可选）
+        ARCHIVE DESTINATION lib  # 静态库目录（可选）
+)
