@@ -1,21 +1,46 @@
+## 概述
+* cmake 编译
+* ctest 测试
+* cpack 创建安装包（如 .exe、.msi、.deb、.rpm、.tar.gz 等）
 
-* cmake
-* ctest
-* cpack
-
+- CMakeLists.txt
+- CMakePreset.json
+- CMakeUserPresets.json
 
 
 ## 生成项目代码
-
+生成ninja、msbuild、makefile等配置
 
 ```shell
 cmake
 -S <path-to-source>
 -B <path-to-build>
--G <Generator>
--A <Architecture>
--D 设置变量
--E 执行命令
+
+# 生成器
+-G <generator-name> # Unix Makefiles、Ninja、Xcode、Visual Studio 17 2022....
+-A <platform-name> # 为生成器指定Architecture，仅仅对部分生成器有效 win32、x64、ARM、ARM64
+-T <toolset-name> # 为生成器指定工具集，仅仅对部分生成器有效
+
+
+# 缓存变量
+-C <initial-cache> # 从预先写好的CMake文件中读取配置，比如文件中有 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /utf-8")
+-D <var>[:<type>]=<value> # 创建或更新变量到CMake Cache中
+-U <globbing_expr> # 从CMake Cache移除匹配的变量
+-L[A][H]  # 显示 CMake 缓存中的变量
+-LR[A][H] <regex> # 正则匹配缓存变量
+
+
+# 预设
+--preset <preset>,--preset=<preset> = Specify a configure preset.
+--list-presets[=<type>]= List available presets.
+--workflow [<options>] = Run a workflow preset.
+
+
+
+-E # 执行 CMake 内置命令，无需项目构建
+
+--toolchain <file>           = Specify toolchain file [CMAKE_TOOLCHAIN_FILE]. 指定交叉编译工具链
+
 ```
 
 
@@ -23,13 +48,16 @@ cmake
 
 
 ## 编译项目代码
-
+使用上面生成的ninja、msbuild、makefile等配置来编译项目
 
 ```shell
 cmake --build <directory>
 --target <target>  # 通过 add_executable, add_library, 或 add_custom_target 添加的，默认情况下会构建所有目标
 --config <config>
 --parallel [n]  # n 表示并行任务的数量（默认为检测到的处理器核心数）
+--clean-first # 先清理再构建
+
+cmake --build --list-presets[=<type>] # List available build presets
 ```
 
 
@@ -54,10 +82,16 @@ cmake --build <directory>
 ```shell
 cmake --install <directory> 
 --prefix <安装路径>
+--config <cfg>     = For multi-configuration tools, choose <cfg>
+--component <comp> = Component-based install. Only install <comp>.
+--parallel <jobs>
 ```
+## 其他命令
 
-
-
+```shell
+cmake --fresh # configure a fresh build tree, removing any existing cache file.
+cmake --open <dir> #  Open generated project in the associated application.
+```
 
 ```shell
 cmake -S . -B build
