@@ -1,4 +1,5 @@
-﻿cmake_minimum_required(VERSION 3.8)
+﻿cmake_minimum_required(VERSION 3.15)
+# set(CMAKE_PROJECT_TOP_LEVEL_INCLUDES conan_provider.cmake)
 project("CMakeProject")
 
 #添加子目录（包含其 CMakeLists.txt）
@@ -15,33 +16,37 @@ project("CMakeProject")
 # add_library(${CMAKE_PROJECT_NAME} MODULE ${SRC_CODE}) 特定用途的动态链接库，用于实现特定功能，通常在运行时被加载。
 
 set(CMAKE_C_STANDARD 17)
-set(CMAKE_CXX_STANDARD 17)  # 设定C++标准
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_CXX_STANDARD 17)
+# set(CMAKE_CXX_STANDARD_REQUIRED ON)
+# set(CMAKE_CXX_EXTENSIONS OFF)
+#set(CMAKE_PREFIX_PATH ${CMAKE_BINARY_DIR}/build/generators/)
+
 
 #set(CMAKE_C_COMPILER)
 #set(CMAKE_CXX_COMPILER)
-set(CMAKE_TOOLCHAIN_FILE conan_toolchain.cmake)
-set(CMAKE_BUILD_TYPE Release)
+message("CMAKE_BINARY_DIR IS ${CMAKE_BINARY_DIR}")
+#set(CMAKE_TOOLCHAIN_FILE ${CMAKE_BINARY_DIR}/build/generators/conan_toolchain.cmake)
+message("${CMAKE_TOOLCHAIN_FILE}")
+#set(CMAKE_BUILD_TYPE Release)
 
 
 # include(CPack)
 include(cmake/env.cmake)
-print_all_variables()# 使用宏
-
-if (EXISTS "${CMAKE_BINARY_DIR}/conan_toolchain.cmake")
-    include(${CMAKE_BINARY_DIR}/conan_toolchain.cmake)
-endif ()
+# print_all_variables()# 使用宏
 
 
-include(${CMAKE_BINARY_DIR}/BoostConfig.cmake)
-find_package(Boost REQUIRED CONFIG)
+
+# 查找当前目录下的所有源文件
+# 并将名称保存到 DIR_SRCS 变量
+# aux_source_directory(. DIR_SRCS)
+# add_executable(${CMAKE_PROJECT_NAME} ${DIR_SRCS})
+
 add_executable(${CMAKE_PROJECT_NAME} main.cpp)
-target_link_libraries(
-        ${CMAKE_PROJECT_NAME}
-        PRIVATE
-        boost::boost
-)
+
+# include(${CMAKE_BINARY_DIR}/build/generators/BoostConfig.cmake)
+find_package(Boost REQUIRED)
+message("${Boost_INCLUDE_DIRS}")
+target_link_libraries(${CMAKE_PROJECT_NAME} boost::boost)
 
 # 文件操作：READ、WRITE、APPEND、COPY、REMOVE、RENAME、MAKE_DIRECTORY、GLOB、MD5、DOWNLOAD……
 # file(GLOB SRC_CODE *.c *.cpp *.cxx *.h *.hpp)
@@ -92,11 +97,3 @@ target_link_libraries(
 #ctest
 #enable_testing()
 #add_test(NAME my_test COMMAND my_test_executable)
-
-
-# 安装可执行文件
-install(TARGETS ${CMAKE_PROJECT_NAME}
-        RUNTIME DESTINATION bin  # 可执行文件目录
-        LIBRARY DESTINATION lib  # 动态库目录（可选）
-        ARCHIVE DESTINATION lib  # 静态库目录（可选）
-)
