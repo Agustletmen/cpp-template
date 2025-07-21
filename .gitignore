@@ -1,2 +1,5 @@
-build/
 .idea
+.vs
+.vscode
+out
+build

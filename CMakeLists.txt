@@ -3,9 +3,7 @@
 project("CMakeProject")
 
 #添加子目录（包含其 CMakeLists.txt）
-#add_subdirectory(mathlib)
-#add_subdirectory(cv)
-#add_subdirectory(media)
+add_subdirectory(mathlib)
 #add_custom_target() # 自定义构建目标
 #add_custom_command() # 自定义构建命令
 # https://cmake.org/cmake/help/git-master/command/add_library.html#command:add_library
@@ -17,22 +15,17 @@ project("CMakeProject")
 
 set(CMAKE_C_STANDARD 17)
 set(CMAKE_CXX_STANDARD 17)
-# set(CMAKE_CXX_STANDARD_REQUIRED ON)
-# set(CMAKE_CXX_EXTENSIONS OFF)
-#set(CMAKE_PREFIX_PATH ${CMAKE_BINARY_DIR}/build/generators/)
-
-
 #set(CMAKE_C_COMPILER)
 #set(CMAKE_CXX_COMPILER)
-message("CMAKE_BINARY_DIR IS ${CMAKE_BINARY_DIR}")
+#set(CMAKE_CXX_STANDARD_REQUIRED ON)
+#set(CMAKE_CXX_EXTENSIONS OFF)
+#set(CMAKE_PREFIX_PATH ${CMAKE_BINARY_DIR}/build/generators/)
 #set(CMAKE_TOOLCHAIN_FILE ${CMAKE_BINARY_DIR}/build/generators/conan_toolchain.cmake)
-message("${CMAKE_TOOLCHAIN_FILE}")
 #set(CMAKE_BUILD_TYPE Release)
 
 
-# include(CPack)
 include(cmake/env.cmake)
-# print_all_variables()# 使用宏
+print_all_variables()# 使用宏
 
 
 
@@ -44,9 +37,9 @@ include(cmake/env.cmake)
 add_executable(${CMAKE_PROJECT_NAME} main.cpp)
 
 # include(${CMAKE_BINARY_DIR}/build/generators/BoostConfig.cmake)
-find_package(Boost REQUIRED)
-message("${Boost_INCLUDE_DIRS}")
-target_link_libraries(${CMAKE_PROJECT_NAME} boost::boost)
+#find_package(Boost REQUIRED)
+#message("${Boost_INCLUDE_DIRS}")
+#target_link_libraries(${CMAKE_PROJECT_NAME} boost::boost)
 
 # 文件操作：READ、WRITE、APPEND、COPY、REMOVE、RENAME、MAKE_DIRECTORY、GLOB、MD5、DOWNLOAD……
 # file(GLOB SRC_CODE *.c *.cpp *.cxx *.h *.hpp)

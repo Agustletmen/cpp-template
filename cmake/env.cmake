@@ -4,3 +4,4 @@ macro(print_all_variables)
         message(STATUS "${_variableName}=>${${_variableName}}")
     endforeach()
 endmacro()
+
