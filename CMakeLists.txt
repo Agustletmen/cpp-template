@@ -8,10 +8,10 @@ add_subdirectory(mathlib)
 #add_custom_command() # 自定义构建命令
 # https://cmake.org/cmake/help/git-master/command/add_library.html#command:add_library
 
-# add_executable(${CMAKE_PROJECT_NAME} ${SRC_CODE})
-# add_library(${CMAKE_PROJECT_NAME} SHARED ${SRC_CODE}) 通用动态链接库，可以被多个应用程序使用。
-# add_library(${CMAKE_PROJECT_NAME} STATIC ${SRC_CODE})
-# add_library(${CMAKE_PROJECT_NAME} MODULE ${SRC_CODE}) 特定用途的动态链接库，用于实现特定功能，通常在运行时被加载。
+#add_executable(${CMAKE_PROJECT_NAME} ${SRC_CODE})
+#add_library(${CMAKE_PROJECT_NAME} SHARED ${SRC_CODE}) 通用动态链接库，可以被多个应用程序使用。
+#add_library(${CMAKE_PROJECT_NAME} STATIC ${SRC_CODE})
+#add_library(${CMAKE_PROJECT_NAME} MODULE ${SRC_CODE}) 特定用途的动态链接库，用于实现特定功能，通常在运行时被加载。
 
 set(CMAKE_C_STANDARD 17)
 set(CMAKE_CXX_STANDARD 17)
