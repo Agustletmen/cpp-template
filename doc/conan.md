@@ -7,6 +7,9 @@ pip install conan --upgrade
 
 # 自动根据机器来创建conan配置
 conan profile detect
+conan profile list
+conan profile show
+conan profile path
 
 # 配置文件如下示例
 # [settings]
@@ -20,13 +23,13 @@ conan profile detect
 
 
 
-
+https://conan.io/center
 # conanfile.txt
 # conanfile.py
 conan install .  # conanfile.py or conanfile.txt
---output-folder=build 
---build=missing
---generator=
+--output-folder=build
+-b,--build=missing # 自动构建本地缺失的包, --build=boost ,build boost package
+-g,--generator=
 # CMakeToolchain
 # CMakeDeps
 # CMakeConfigDeps
@@ -54,8 +57,8 @@ conan install .  # conanfile.py or conanfile.txt
 # QbsProfile
 # CPSDeps
 # ROSEnv
---remote=conancenter
---no-remote
+-r,--remote=conancenter
+-nr,--no-remote
 
 conan remove # 从本地缓存中删除指定的 Conan 包。
 conan info # 显示有关指定 Conan 包的信息。
@@ -64,9 +67,10 @@ conan search # 搜索可用的 Conan 包。
 conan search grpc* -r=conancenter
 
 # conan仓库管理
-conan remote list
 conan remote add conancenter https://center.conan.io
-
+#conan remote list                    # 列出所有远程仓库
+#conan remote add <name> <url>        # 添加远程仓库
+#conan remote update <name> <url>     # 更新远程仓库URL
 ```
 
 

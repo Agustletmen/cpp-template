@@ -17,26 +17,4 @@ os=Linux
 
 [conf]
 tools.cmake.cmaketoolchain:generator=Ninja
-
-```
-
-
-env:gcc/g++、cmake、ninja、conan2
-pkg:
-grpc
-fmt
-boost
-zlib
-bzip2
-openssl
-opencv
-qt
-
-
-```shell
-apt udpate
-apt install cmake
-apt install ninja-build
-apt install build-essential
-
 ```
