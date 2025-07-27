@@ -40,8 +40,8 @@ if (NOT CMAKE_BUILD_TYPE)
 endif ()
 message("Build type: " ${CMAKE_BUILD_TYPE})
 
-# include(cmake/env.cmake)
-# print_all_variables()# 使用宏
+ include(cmake_script/env.cmake)
+ print_all_variables()# 使用宏
 
 
 # find_package() # 模块模式、配置模式
@@ -54,7 +54,7 @@ find_package(gRPC)
 find_package(fmt)
 
 
-message(QT_PLUGIN_PATH ==> ${QT_PLUGIN_PATH})
+
 
 # 查找当前目录下的所有源文件
 # 并将名称保存到 DIR_SRCS 变量
