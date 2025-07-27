@@ -2,6 +2,7 @@
 boost/1.88.0
 grpc/1.72.0
 fmt/11.2.0
+# opencv/4.11.0
 
 [generators]
 CMakeDeps

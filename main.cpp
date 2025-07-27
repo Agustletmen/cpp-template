@@ -3,8 +3,7 @@
 
 using namespace boost::asio;
 
-int main()
-{
+int main() {
     io_context io;
     serial_port sp(io, "COM1");
 
@@ -15,21 +14,21 @@ int main()
     sp.set_option(serial_port::stop_bits(serial_port::stop_bits::one));
     sp.set_option(serial_port::character_size(8));
 
-    std::cout << "开始监听串口..." << std::endl;
-    
+    std::cout << "start listen serial post..." << std::endl;
+
     try {
         char buf[128];
         while (true) {
             size_t n = sp.read_some(buffer(buf));
             if (n > 0) {
-                std::cout << "收到 " << n << " 字节: ";
+                std::cout << "receive " << n << " byte: ";
                 for (size_t i = 0; i < n; ++i)
                     std::cout << std::hex << static_cast<int>(static_cast<unsigned char>(buf[i])) << " ";
                 std::cout << std::endl;
             }
         }
-    } catch (const std::exception& e) {
-        std::cerr << "异常: " << e.what() << std::endl;
+    } catch (const std::exception &e) {
+        std::cerr << "exception: " << e.what() << std::endl;
         return 1;
     }
 
