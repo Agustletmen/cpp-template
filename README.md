@@ -17,7 +17,7 @@ ldd <executable>
 
 
 
-
+conan install . -s build_type=Debug  --build=missing
 
 ## 使用grpc
 ```shell

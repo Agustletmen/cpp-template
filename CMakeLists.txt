@@ -3,12 +3,15 @@
 
 cmake_minimum_required(VERSION 3.15) # 指定 CMake 最低版本（必须放在最前面）
 cmake_policy(SET CMP0167 OLD) # 将策略 CMP0167 设置为使用旧版本的行为。
+#cmake_policy(SET CMP0091 NEW)
 project("CMakeProject" # CMAKE_PROJECT_NAME
         VERSION 1.0.0
         DESCRIPTION "A cross-platform app"
         HOMEPAGE_URL agustletmen.github.io
         LANGUAGES C CXX
 )
+
+
 
 
 #定义变量：set(变量名 变量值1 变量值2 ...)（变量值可多个，用空格分隔）；
@@ -29,15 +32,19 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 #set(CMAKE_CXX_COMPILER)
 
 
-
 set(CMAKE_TOOLCHAIN_FILE build/generators/conan_toolchain.cmake)
 set(CMAKE_PREFIX_PATH build/generators/)
 
 
+set(CMAKE_BUILD_TYPE Release)
+if (NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE "Debug")
+endif ()
+message("Build type: " ${CMAKE_BUILD_TYPE})
+
 include(cmake/env.cmake)
 print_all_variables()# 使用宏
 # custom_print_variables()# 使用宏
-
 
 
 # find_package() # 模块模式、配置模式
@@ -46,14 +53,11 @@ print_all_variables()# 使用宏
 # find_program() # 查找可执行文件并设置变量
 # find_library() # 查找库文件并设置变量以供后续链接使用
 #find_package(库名 [版本] [REQUIRED] [COMPONENTS 组件])
-find_package(Boost REQUIRED)
-find_package(gRPC REQUIRED)
-find_package(fmt REQUIRED)
+find_package(Boost)
+find_package(gRPC)
+find_package(fmt)
+find_package(ffmpeg)
 
-# 添加子目录（需该目录下有自己的CMakeLists.txt）
-add_subdirectory(util)
-add_subdirectory(cv)
-add_subdirectory(syntax)
 
 #==============================================文件操作====================================================
 # 文件操作：READ、WRITE、APPEND、COPY、REMOVE、RENAME、MAKE_DIRECTORY、GLOB、MD5、DOWNLOAD……
@@ -88,6 +92,11 @@ add_subdirectory(syntax)
 #link_directories()
 #link_libraries()
 
+# 添加子目录（需该目录下有自己的CMakeLists.txt）
+add_subdirectory(util)
+add_subdirectory(cv)
+add_subdirectory(syntax)
+
 add_executable(${CMAKE_PROJECT_NAME} main.cpp)
 
 # target_compile_options() # 指定目标设置编译器选项
@@ -96,15 +105,11 @@ add_executable(${CMAKE_PROJECT_NAME} main.cpp)
 
 # 为指定目标设置包含目录，以供编译时查找头文件
 # target_include_directories(目标名 作用域 路径1 路径2 ...)
-#target_include_directories(${CMAKE_PROJECT_NAME}
-#        PRIVATE # 仅当前目标生效（内部头文件，不对外暴露）
-#        util/math
-##        PUBLIC   # 当前目标+依赖它的目标生效（对外暴露的头文件）
-##        INTERFACE # 仅对外暴露，自身不用
-#)
-
-target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
+target_include_directories(${CMAKE_PROJECT_NAME}
+        PRIVATE # 仅当前目标生效（内部头文件，不对外暴露）
         util/math
+        #        PUBLIC   # 当前目标+依赖它的目标生效（对外暴露的头文件）
+        #        INTERFACE # 仅对外暴露，自身不用
 )
 
 
@@ -113,9 +118,9 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
 
 
 # 指定链接器查找库文件的搜索路径
-#target_link_directories(${CMAKE_PROJECT_NAME}
-#        PRIVATE
-#)
+target_link_directories(${CMAKE_PROJECT_NAME}
+        PRIVATE
+)
 
 # 为目标链接所需的库文件
 # target_link_libraries(目标名 作用域 库名1 库名2 ...)
@@ -123,6 +128,7 @@ target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE
         boost::boost
         grpc::grpc
         fmt::fmt
+        ffmpeg::ffmpeg
 )
 
 #==============================================测试====================================================
