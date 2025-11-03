@@ -54,9 +54,10 @@ print_all_variables()# 使用宏
 # find_library() # 查找库文件并设置变量以供后续链接使用
 #find_package(库名 [版本] [REQUIRED] [COMPONENTS 组件])
 find_package(Boost)
-find_package(gRPC)
+#find_package(gRPC)
 find_package(fmt)
 find_package(ffmpeg)
+find_package(opencv)
 
 
 #==============================================文件操作====================================================
@@ -126,7 +127,7 @@ target_link_directories(${CMAKE_PROJECT_NAME}
 # target_link_libraries(目标名 作用域 库名1 库名2 ...)
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE
         boost::boost
-        grpc::grpc
+#        grpc::grpc
         fmt::fmt
         ffmpeg::ffmpeg
 )
